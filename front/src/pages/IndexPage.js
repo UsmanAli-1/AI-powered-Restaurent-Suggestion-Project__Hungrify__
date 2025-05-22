@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import Post from '../post';
-// import post from '../post';
 
 export default function IndexPage() {
     const [posts, setPosts] = useState([]);

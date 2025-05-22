@@ -1,6 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "./UserContext";
+import logo from './logo.jpg';
+import Button from '@mui/material/Button';
+
 
 export default function Header() {
   const { setUserInfo, userInfo } = useContext(UserContext);
@@ -62,7 +65,7 @@ export default function Header() {
 
   return (
     <header>
-      <Link to="/" className="logo">MyBlogs</Link>
+      <Link to="/"  className="logo"><img src={logo} /></Link>
       <nav>
         {username && (
           <>
@@ -72,8 +75,8 @@ export default function Header() {
         )}
         {!username && (
           <>
-            <Link to="login">Login</Link>
-            <Link to="Register">Register</Link>
+            <Link to="login"><Button variant="contained" color="primary">Login</Button></Link>
+            <Link to="Register"><Button variant="contained" color="primary" sx={{ mr: 2 }}>Register</Button></Link>
           </>
         )}
 
