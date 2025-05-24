@@ -7,15 +7,20 @@ export default function IndexPage() {
         fetch('http://localhost:4000/post').then(response => {
             response.json().then(posts => {
                 setPosts(posts);
-                console.log("post loaded 🥅🥅🥅`" , posts);
+                console.log("post loaded 🥅🥅🥅`", posts);
             });
-        }); 
+        });
     }, []);
     return (
         <>
-            {posts.length > 0 && posts.map(post => (
-                <Post {...post} />
-            ))}
+        <div className="slogan">
+            <h2>Scroll Less, Eat Best.</h2>
+        </div>
+            <div className="posts-container">
+                {posts.length > 0 && posts.map(post => (
+                    <Post key={post._id} {...post} />
+                ))}
+            </div>
 
         </>
     );
