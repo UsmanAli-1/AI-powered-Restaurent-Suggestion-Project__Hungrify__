@@ -1,9 +1,9 @@
+import './header.css';
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "./UserContext";
 import logo from './logo.jpg';
 import Button from '@mui/material/Button';
-
 
 export default function Header() {
   const { setUserInfo, userInfo } = useContext(UserContext);
@@ -69,14 +69,16 @@ export default function Header() {
       <nav>
         {username && (
           <>
-            <Link to="/create" > Create new post</Link>
-            <a onClick={logout}>Logout</a>
+             <Link to="/create" className="custom-btn">Create New Post</Link>
+             <a onClick={logout} className="custom-btn">Logout</a>
           </>
+
         )}
         {!username && (
           <>
             <Link to="login"><Button variant="contained" color="primary">Login</Button></Link>
             <Link to="Register"><Button variant="contained" color="primary" sx={{ mr: 2 }}>Register</Button></Link>
+          
           </>
         )}
 

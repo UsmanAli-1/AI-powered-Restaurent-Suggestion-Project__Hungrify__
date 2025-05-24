@@ -1,4 +1,5 @@
 import './App.css';
+import './responsive.css';
 import IndexPage from './pages/IndexPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';

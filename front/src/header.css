@@ -1,0 +1,63 @@
+
+.logo {
+  width: 50px;
+  margin-top: 5px;
+}
+
+a {
+  cursor: pointer;
+}
+
+header {
+  height: 12%;
+  width: 100%;
+  background-color: rgb(17, 102, 102);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 10px 20px;
+  margin-bottom: 10px;
+}
+
+header a {
+  color: inherit;
+  text-decoration: none;
+}
+
+header .logo {
+  font-weight: bold;
+  font-size: 1.6rem;
+  color: black;
+}
+
+header nav {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.custom-btn {
+  background-color: #1976d2;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 1rem;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+  text-align: center;
+}
+
+.custom-btn:hover {
+  background-color: #115293;
+}
+
+/* Responsive for small screens */
+@media (max-width: 768px) {
+  .custom-btn {
+    font-size: 0.8rem;
+    padding: 12px 5px;
+    width: 40%;  /* optional: make them full width on mobile */
+  }
+}

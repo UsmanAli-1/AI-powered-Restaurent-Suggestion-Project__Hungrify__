@@ -8,5 +8,5 @@ export default function layout() {
                           {/* use outlet to put content between  */}
             <Outlet />
         </main>
-    );
+    )
 }

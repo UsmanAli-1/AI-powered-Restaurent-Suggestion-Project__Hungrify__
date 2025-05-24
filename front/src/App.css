@@ -13,110 +13,102 @@ img {
 }
 
 main {
+  width: 100%;  
+}
+
+
+.slogan {
   width: 100%;
-  /* margin: 0 auto; */
-}
-.logo{
-  width: 5%;
-  margin-top: 5px;
-}
-a {
-  cursor: pointer;
-}
-
-header {
-  background-color: aqua;
+  height: auto;
+  padding: 20px 10px;
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
-  
-  /* margin-top: 30px; */
- margin-bottom: 10px;
+  text-align: center;
 }
 
-header a {
-  color: inherit;
+.slogan h2 {
+  color: #555;
+  font-size: 2rem; /* Default size */
+  margin: 0;
+}
+
+
+.posts-container {
+  width: 100%;
+  max-width: 1200px;
+  margin:  auto; 
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* centers children (.post divs) */
+  gap: 3rem; /* space between posts */
+}
+
+.post {
+  width: 100%;
+  max-width: 500px; /* Optional: limit max width */
+  height: 300px;
+  /* background-color: #fff; */
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  
+}
+
+/* Cover image takes 60–70% of post height */
+.post .image {
+  height: 65%;
+  width: 100%;
+}
+
+.post .image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Logo positioned 20px from left and overlaps cover */
+.post .rest-image {
+  position: absolute;
+  left: 20px;
+  top: calc(62% - 25px); 
+  z-index: 2;
+}
+
+.post .rest-image img {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border: 2px solid #000000;
+}
+
+/* Text beside the logo */
+.post .text {
+  position: absolute;
+  top: calc(65% + 5px);
+  left: 110px; /* 20px (logo) + 50px (logo width) + 20px spacing */
+  right: 10px;
+
+}
+
+.post .text h2 {
+  font-size: 1rem;
+  margin: 0;
+  color: #333;
+  line-height: 1.2;
+}
+
+.post a{
   text-decoration: none;
 }
 
-header .logo {
-  font-weight: bold;
-  font-size: 1.6rem;
-  color: black;
-}
 
-header nav {
-  display: flex;
-  gap: 15px;
-}
-
-.slogan{
-  border: 2px solid red;
-  height: 10rem;
-  width: 60rem;
-  margin: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.slogan h2{
-  font-size: 2.5rem;
-}
-
-div.post {
-  /* border: 2px solid slategray; */
-    box-shadow: -4px 4px 10px rgba(0, 0, 0, 0.2); /* left + bottom */
-  border-radius: 15px;
-  width: 40rem;
-  height: 16rem;
-  position: relative;
-}
-div.post div.image {
-  /* border: 2px solid blue; */
-  height: 65%;
-  width: 100%;
-  overflow: hidden;
-  border-radius: 10px;
-}
-div.post div.image img{
-  object-fit: cover;
-    transition: transform 0.3s ease;
-}
-div.post div.image img:hover{
-    transform: scale(1.1);  
-}
-div.post div.rest-image{
-  position: absolute;
-  /* border: 2px solid orange; */
-  border-radius: 10px;
-  overflow: hidden;
-  height: 10rem;
-  width: 10rem;
-  z-index: 1;
-  bottom: 0rem;
-  left: 2rem;
-}
-.rest-image img{
-  width: 100%;
-  height: 100%;
-}
-.posts-container{
-  margin: auto;
-  margin-top: 5rem;
-  width: 90vw;
-  border: 2px solid royalblue;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  row-gap: 3rem;
-  column-gap: 5rem;
-}
+/*
 .text{
   position: absolute;
   width: 60%;
   height: 5rem;
   bottom : 0.3rem;
-  /* border: 2px solid green; */
   right: 2rem;
   overflow: hidden;
 }
@@ -150,6 +142,7 @@ p {
   line-height: 1.4rem;
   color: inherit;
 }
+*/
 
 .formPage {
   max-width: 400px;
@@ -240,79 +233,4 @@ div.post-page a.edit-btn {
 
 a svg {
   height: 20px;
-}
-
-@media screen and (min-width: 700px) {
-  div.post {
-    /* grid-template-columns: 0.9fr 1.1fr; */
-  }
-}
-
-@media screen and (max-width: 699px) {
-  main {
-    width: 100vw;
-    border: 2px solid orange;
-    /* margin: 0 auto;
-    padding: 10px; */
-  }
-  .posts-container{
-    width: 950px;
-    /* flex-direction: ; */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    margin: auto;
-  }
-  div.post {
-    width:40%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-  }
-
-  div.post div.image {
-    width: 100%;
-    border: 2px solid red;
-    max-height: 250px;
-    display: flex;
-    overflow: hidden;
-  }
-div.post div.image img{
-  /* object-fit: cover;
-  width: 100%;
-  height: 100%; */
-
-}
-div.post div.rest-image{
-  width: 9rem;
-  height: 9rem;
-  left: 1rem;
-}
-  .text {
-    text-align: center;
-    width: 50%;
-    border: 2px solid red;
-    right: 1.5rem;
-  }
-  .text h2{
-    font-size: 1.5rem;
-  }
-
-  p {
-    margin: 10px 10px;
-  }
-
-  .post p.info {
-    display: flex;
-    justify-content: center;
-    
-  }
-
-  div.post-page a.edit-btn {
-    gap: 2px;
-    padding: 4px 8px;
-    font-size: 0.85rem;
-  }
 }
