@@ -82,40 +82,93 @@ app.get('/profile', (req, res) => {
 app.post('/logout', (req, res) => {
         res.cookie('token', '').json('ok')
 })
+// ==============================================================create post rqst ================
+// app.post('/post', uploadMiddleware.single('file'), async (req, res) => {
+//         try {
+//                 if (!req.file) {
+//                         return res.status(400).json({ error: "File upload is required!" });
+//                 }
+//                 const { originalname, path } = req.file;
 
-app.post('/post', uploadMiddleware.single('file'), async (req, res) => {
-        try {
-                if (!req.file) {
-                        return res.status(400).json({ error: "File upload is required!" });
-                }
-                const { originalname, path } = req.file;
+//                 const parts = originalname.split('.');
+//                 const ext = parts[parts.length - 1];
+//                 const newPath = path + '.' + ext;
+//                 fs.renameSync(path, newPath);
 
-                const parts = originalname.split('.');
-                const ext = parts[parts.length - 1];
-                const newPath = path + '.' + ext;
-                fs.renameSync(path, newPath);
+//                 const { title, summary, content } = req.body;
+//                 if (!title || !summary || !content) {
+//                         return res.status(400).json({ error: "Title, summary, and content are required!" });
+//                 }
 
-                const { title, summary, content } = req.body;
-                if (!title || !summary || !content) {
-                        return res.status(400).json({ error: "Title, summary, and content are required!" });
-                }
+//                 const { token } = req.cookies;
+//                 jwt.verify(token, secret, {}, async (err, info) => {
+//                         if (err) throw err;
+//                         const postDoc = await Post.create({
+//                                 title,
+//                                 summary,
+//                                 content,
+//                                 cover: newPath,
+//                                 author: info.id,
+//                         });
+//                         res.json(postDoc);
+//                 });
+//         } catch (error) {
+//                 res.status(500).json({ error: "Internal server error" });
+//         }
+// });
 
-                const { token } = req.cookies;
-                jwt.verify(token, secret, {}, async (err, info) => {
-                        if (err) throw err;
-                        const postDoc = await Post.create({
-                                title,
-                                summary,
-                                content,
-                                cover: newPath,
-                                author: info.id,
-                        });
-                        res.json(postDoc);
-                });
-        } catch (error) {
-                res.status(500).json({ error: "Internal server error" });
+// ===============edit code 
+app.post('/post', uploadMiddleware.fields([
+    { name: 'file', maxCount: 1 },
+    { name: 'logo', maxCount: 1 },
+]), async (req, res) => {
+    try {
+        const coverFile = req.files?.file?.[0];
+        const logoFile = req.files?.logo?.[0];
+
+        if (!coverFile) {
+            return res.status(400).json({ error: "Cover file is required!" });
         }
+
+        // Rename cover file
+        const coverExt = coverFile.originalname.split('.').pop();
+        const coverNewPath = coverFile.path + '.' + coverExt;
+        fs.renameSync(coverFile.path, coverNewPath);
+
+        let logoNewPath = null;
+        if (logoFile) {
+            const logoExt = logoFile.originalname.split('.').pop();
+            logoNewPath = logoFile.path + '.' + logoExt;
+            fs.renameSync(logoFile.path, logoNewPath);
+        }
+
+        const { title, summary, content } = req.body;
+        if (!title || !summary || !content) {
+            return res.status(400).json({ error: "Title, summary, and content are required!" });
+        }
+
+        const { token } = req.cookies;
+        jwt.verify(token, secret, {}, async (err, info) => {
+            if (err) throw err;
+
+            const postDoc = await Post.create({
+                title,
+                summary,
+                content,
+                cover: coverNewPath,
+                logo: logoNewPath, // store logo path
+                author: info.id,
+            });
+
+            res.json(postDoc);
+        });
+    } catch (error) {
+        console.error("💥 Error:", error.message);
+        res.status(500).json({ error: "Internal server error" });
+    }
 });
+
+// ===============edit code 
 
 app.put('/post/:id', uploadMiddleware.single('file'), async (req, res) => {
         try {
@@ -207,6 +260,7 @@ app.put('/post/:id', uploadMiddleware.single('file'), async (req, res) => {
         }
     });
     
+// =============================================================================    
     
 
 app.get('/post', async (req, res) => {

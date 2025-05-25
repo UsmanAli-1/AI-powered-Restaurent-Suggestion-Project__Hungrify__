@@ -8,6 +8,7 @@ export default function CreatePost() {
     const [summary, setSummary] = useState('');
     const [content, setContent] = useState('');
     const [files, setFiles] = useState('');
+    const [logo, setLogo] = useState(''); // for logo code
     const [redirect , setRedirect] = useState(false);
 
     async function createNewPost(ev) {
@@ -26,6 +27,14 @@ export default function CreatePost() {
                 console.log("📂 File attached:", files[0].name);
             } else {
                 console.warn("⚠️ No file attached.");
+            }
+            
+            // for logo code
+            if (logo.length > 0) {
+                 data.set('logo', logo[0]);
+                console.log("📂 Logo file attached:", logo[0].name);
+            } else {
+                console.warn("⚠️ No logo file attached.");
             }
     
             console.log("🌐 Sending POST request to /post...");
@@ -69,6 +78,9 @@ export default function CreatePost() {
             />
             <input type="file"
                 onChange={ev => setFiles(ev.target.files)}
+            />
+            <input type="file"
+                onChange={ev => setLogo(ev.target.files)}
             />
             <Editor value={content} onChange={setContent} />
             <button style={{ marginTop: '5px' }}>Create Post</button>

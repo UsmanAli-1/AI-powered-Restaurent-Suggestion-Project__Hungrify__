@@ -40,8 +40,9 @@ export default function PostPage() {
             <div className="logo-rating">
                 {/* Restaurant Logo */}
                 <div className="restaurant-logo">
-                    <img src={`http://localhost:4000/${postInfo.cover}`} alt="Restaurant Logo" />
+                    <img src={`http://localhost:4000/${postInfo.logo}`} alt="Restaurant Logo" />
                 </div>
+                
                 <div className="rating-badge">
                     <span style={{ marginRight: '5px' }}>⭐</span>
                     {postInfo.rating || '4.5'}/5

@@ -2,7 +2,7 @@ import './header.css';
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "./UserContext";
-import logo from './logo.jpg';
+import logo from './com-logo.png';
 import Button from '@mui/material/Button';
 
 export default function Header() {
