@@ -76,8 +76,8 @@ export default function Header() {
         )}
         {!username && (
           <>
-            <Link to="login"><Button variant="contained" color="primary">Login</Button></Link>
-            <Link to="Register"><Button variant="contained" color="primary" sx={{ mr: 2 }}>Register</Button></Link>
+            <Link to="login"><Button variant="contained" sx={{ backgroundColor: '#4caf50' }}>Login</Button></Link>
+            <Link to="Register"><Button variant="contained" sx={{ mr: 2,backgroundColor: '#4caf50' }}>Register</Button></Link>
           
           </>
         )}

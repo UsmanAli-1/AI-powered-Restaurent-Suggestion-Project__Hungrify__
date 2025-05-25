@@ -11,7 +11,7 @@ a {
 header {
   height: 12%;
   width: 100%;
-  background-color: rgb(17, 102, 102);
+  background-color: #e5ffc0 ;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -38,7 +38,7 @@ header nav {
 }
 
 .custom-btn {
-  background-color: #1976d2;
+  background-color: #16890c;
   color: white;
   padding: 8px 16px;
   border-radius: 5px;
@@ -50,7 +50,7 @@ header nav {
 }
 
 .custom-btn:hover {
-  background-color: #115293;
+  background-color: #16890c98;
 }
 
 /* Responsive for small screens */
