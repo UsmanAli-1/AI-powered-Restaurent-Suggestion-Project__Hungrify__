@@ -1,5 +1,3 @@
-
-
 // import './header.css';
 // import { useContext, useEffect, useState } from "react";
 // import { Link } from "react-router-dom";
@@ -10,18 +8,13 @@
 // export default function Header() {
 //   const { setUserInfo, userInfo } = useContext(UserContext);
 
-//   const [hasCreatedPost, setHasCreatedPost] = useState(false); // ✅ Track if user has created post
-
 //   useEffect(() => {
 //     const hasCredentials = () => {
 //       return document.cookie.includes("token") || localStorage.getItem("token");
 //     };
 
 //     if (hasCredentials()) {
-//       // ✅ Check localStorage for post flag
-//       const hasPosted = localStorage.getItem("hasCreatedPost") === "true";
-//       setHasCreatedPost(hasPosted);
-
+//       console.log("📡 Fetching user profile...");
 //       fetch('http://localhost:4000/profile', {
 //         credentials: 'include',
 //       })
@@ -29,15 +22,19 @@
 //           if (!response.ok) {
 //             throw new Error(`HTTP error! status: ${response.status}`);
 //           }
+//           console.log("✅ Profile fetch successful, parsing JSON...");
 //           return response.json();
 //         })
 //         .then(userInfo => {
+//           console.log("👤 User info received:", userInfo);
 //           setUserInfo(userInfo);
 //         })
 //         .catch(error => {
 //           console.error("🔥 Failed to fetch user profile:", error);
 //           alert("An error occurred while fetching user profile: " + error.message);
 //         });
+//     } else {
+//       console.log("🔒 No credentials found, skipping profile fetch.");
 //     }
 //   }, []);
 
@@ -55,7 +52,6 @@
 //     })
 //       .then(() => {
 //         clearAllCookies();
-//         localStorage.removeItem("hasCreatedPost"); // ✅ Remove flag on logout
 //         setUserInfo(null);
 //       })
 //       .catch(error => {
@@ -64,33 +60,34 @@
 //       });
 //   }
 
+
 //   const username = userInfo?.username;
 
 //   return (
 //     <header>
-//       <Link to="/" className="logo"><img src={logo} alt="Logo" /></Link>
+//       <Link to="/"  className="logo"><img src={logo} /></Link>
 //       <nav>
 //         {username && (
 //           <>
-//             {/* ✅ Show only if post has not been created */}
-//             {!hasCreatedPost && (
-//               <Link to="/create" className="custom-btn">Create New Post</Link>
-//             )}
-//             <a onClick={logout} className="custom-btn">Logout</a>
+//              <Link to="/create" className="custom-btn">Create New Post</Link>
+//              <a onClick={logout} className="custom-btn">Logout</a>
 //           </>
+
 //         )}
 //         {!username && (
 //           <>
 //             <Link to="login"><Button variant="contained" sx={{ backgroundColor: '#4caf50' }}>Login</Button></Link>
-//             <Link to="Register"><Button variant="contained" sx={{ mr: 2, backgroundColor: '#4caf50' }}>Register</Button></Link>
+//             <Link to="Register"><Button variant="contained" sx={{ mr: 2,backgroundColor: '#4caf50' }}>Register</Button></Link>
+          
 //           </>
 //         )}
+
 //       </nav>
 //     </header>
 //   );
 // }
 
-// ==================================edit code for hide creatpost button 
+
 
 
 import './header.css';
@@ -102,36 +99,32 @@ import Button from '@mui/material/Button';
 
 export default function Header() {
   const { setUserInfo, userInfo } = useContext(UserContext);
+  const [hasPost, setHasPost] = useState(false); // New state
 
   useEffect(() => {
-    const hasCredentials = () => {
-      return document.cookie.includes("token") || localStorage.getItem("token");
-    };
+  const hasCredentials = () => {
+    return document.cookie.includes("token") || localStorage.getItem("token");
+  };
 
-    if (hasCredentials()) {
-      console.log("📡 Fetching user profile...");
-      fetch('http://localhost:4000/profile', {
-        credentials: 'include',
+  if (userInfo?.username && hasCredentials()) {
+    // When user info is available, fetch post status
+    fetch('http://localhost:4000/has-post', {
+      credentials: 'include',
+    })
+      .then(response => {
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        return response.json();
       })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          console.log("✅ Profile fetch successful, parsing JSON...");
-          return response.json();
-        })
-        .then(userInfo => {
-          console.log("👤 User info received:", userInfo);
-          setUserInfo(userInfo);
-        })
-        .catch(error => {
-          console.error("🔥 Failed to fetch user profile:", error);
-          alert("An error occurred while fetching user profile: " + error.message);
-        });
-    } else {
-      console.log("🔒 No credentials found, skipping profile fetch.");
-    }
-  }, []);
+      .then(data => {
+        setHasPost(data.hasPost);
+      })
+      .catch(error => {
+        console.error("Error fetching post status:", error);
+        setHasPost(false);
+      });
+  }
+}, [userInfo]); // 👈 useEffect now runs whenever userInfo changes
+
 
   function clearAllCookies() {
     document.cookie.split(';').forEach(cookie => {
@@ -148,6 +141,7 @@ export default function Header() {
       .then(() => {
         clearAllCookies();
         setUserInfo(null);
+        setHasPost(false); // reset on logout
       })
       .catch(error => {
         console.error('Error during logout:', error);
@@ -155,29 +149,27 @@ export default function Header() {
       });
   }
 
-
   const username = userInfo?.username;
 
   return (
     <header>
-      <Link to="/"  className="logo"><img src={logo} /></Link>
+      <Link to="/" className="logo"><img src={logo} /></Link>
       <nav>
         {username && (
           <>
-             <Link to="/create" className="custom-btn">Create New Post</Link>
-             <a onClick={logout} className="custom-btn">Logout</a>
+            {/* Show the button only if user does NOT have a post */}
+            {!hasPost && <Link to="/create" className="custom-btn">Create New Post</Link>}
+            <a onClick={logout} className="custom-btn">Logout</a>
           </>
-
         )}
         {!username && (
           <>
             <Link to="login"><Button variant="contained" sx={{ backgroundColor: '#4caf50' }}>Login</Button></Link>
-            <Link to="Register"><Button variant="contained" sx={{ mr: 2,backgroundColor: '#4caf50' }}>Register</Button></Link>
-          
+            <Link to="Register"><Button variant="contained" sx={{ mr: 2, backgroundColor: '#4caf50' }}>Register</Button></Link>
           </>
         )}
-
       </nav>
     </header>
   );
 }
+

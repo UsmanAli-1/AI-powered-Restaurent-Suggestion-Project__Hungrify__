@@ -33,88 +33,45 @@ export default function EditPost() {
     }, [id]);
 
     // Update post
-    // async function updatePost(ev) {
-    //     ev.preventDefault();
-    //     console.log("📤 Sending update request...");
-
-    //     const data = new FormData();
-    //     data.set('title', title);
-    //     data.set('summary', summary);
-    //     data.set('content', content);
-    //     data.set('id', id);
-
-    //     if (files?.[0]) {
-    //         console.log("📂 Attaching file:", files[0]);
-    //         data.set('file', files[0]);
-    //     }
-
-    //     if (logo?.[0]) {
-    //          console.log("📂 Attaching logo:", logo[0]);
-    //          data.set('logo', logo[0]);
-    //     }
-
-    //     try {
-    //         const response = await fetch('http://localhost:4000/post/' + id, {
-    //             method: 'PUT',
-    //             body: data,
-    //             credentials: 'include',
-    //         });
-
-    //         if (response.ok) {
-    //             console.log("✅ Post updated successfully!");
-    //             setRedirect(true);
-    //         } else {
-    //             const errorData = await response.json();
-    //             console.error("❌ Update failed:", errorData.error || "Unknown error");
-    //             alert(`Update failed: ${errorData.error || "Unknown error"}`);
-    //         }
-    //     } catch (err) {
-    //         console.error("💥 Error updating post:", err.message);
-    //     }
-    // }
-
-    // =======================edit code after 
     async function updatePost(ev) {
-    ev.preventDefault();
-    console.log("📤 Sending update request...");
+        ev.preventDefault();
+        console.log("📤 Sending update request...");
 
-    const data = new FormData();
-    data.set('title', title);
-    data.set('summary', summary);
-    data.set('content', content);
-    data.set('id', id);
+        const data = new FormData();
+        data.set('title', title);
+        data.set('summary', summary);
+        data.set('content', content);
+        data.set('id', id);
 
-    if (files?.[0]) {
-        console.log("📂 Attaching cover file:", files[0]);
-        data.set('file', files[0]);
-    }
-
-    if (logo?.[0]) {
-        console.log("📂 Attaching logo file:", logo[0]);
-        data.set('logo', logo[0]);
-    }
-
-    try {
-        const response = await fetch('http://localhost:4000/post/' + id, {
-            method: 'PUT',
-            body: data,
-            credentials: 'include',
-        });
-
-        if (response.ok) {
-            console.log("✅ Post updated successfully!");
-            setRedirect(true);
-        } else {
-            const errorData = await response.json();
-            console.error("❌ Update failed:", errorData.error || "Unknown error");
-            alert(`Update failed: ${errorData.error || "Unknown error"}`);
+        if (files?.[0]) {
+            console.log("📂 Attaching file:", files[0]);
+            data.set('file', files[0]);
         }
-    } catch (err) {
-        console.error("💥 Error updating post:", err.message);
-    }
-}
 
-    // =======================edit code after 
+        if (logo?.[0]) {
+             console.log("📂 Attaching logo:", logo[0]);
+             data.set('logo', logo[0]);
+        }
+
+        try {
+            const response = await fetch('http://localhost:4000/post/' + id, {
+                method: 'PUT',
+                body: data,
+                credentials: 'include',
+            });
+
+            if (response.ok) {
+                console.log("✅ Post updated successfully!");
+                setRedirect(true);
+            } else {
+                const errorData = await response.json();
+                console.error("❌ Update failed:", errorData.error || "Unknown error");
+                alert(`Update failed: ${errorData.error || "Unknown error"}`);
+            }
+        } catch (err) {
+            console.error("💥 Error updating post:", err.message);
+        }
+    }   
 
 
     // Redirect if update is successful
