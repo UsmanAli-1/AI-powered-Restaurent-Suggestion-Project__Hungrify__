@@ -43,15 +43,15 @@ export default function EditPost() {
         data.set('content', content);
         data.set('id', id);
 
+        if (logo?.[0]) {
+             console.log("📂 Attaching logo:", logo[0]);
+             data.set('logo', logo[0]);
+        }
         if (files?.[0]) {
             console.log("📂 Attaching file:", files[0]);
             data.set('file', files[0]);
         }
 
-        if (logo?.[0]) {
-             console.log("📂 Attaching logo:", logo[0]);
-             data.set('logo', logo[0]);
-        }
 
         try {
             const response = await fetch('http://localhost:4000/post/' + id, {
@@ -95,12 +95,12 @@ export default function EditPost() {
                 value={summary}
                 onChange={ev => setSummary(ev.target.value)}
             />
+                <input type="file"
+                    onChange={ev => setLogo(ev.target.files)}
+                />
             <input
                 type="file"
                 onChange={ev => setFiles(ev.target.files)}
-            />
-            <input type="file"
-                onChange={ev => setLogo(ev.target.files)}
             />
             <Editor onChange={setContent} value={content} />
             <button style={{ marginTop: '5px' }}>Update Post</button>

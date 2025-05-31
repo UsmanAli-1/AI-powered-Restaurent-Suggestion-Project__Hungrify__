@@ -131,6 +131,95 @@ app.post('/post', uploadMiddleware.fields([
     }
 });
 
+
+app.put('/post/:id', uploadMiddleware.fields([
+    { name: 'file', maxCount: 1 },
+    { name: 'logo', maxCount: 1 }
+]), async (req, res) => {
+    try {
+        const postId = req.params.id;
+
+        if (!postId) {
+            console.error("❌ Post ID is missing");
+            return res.status(400).json({ error: "Post ID is required!" });
+        }
+
+        console.log(`📌 Post ID: ${postId}`);
+
+        const { title, summary, content } = req.body;
+
+        if (!title || !summary || !content) {
+            console.error("❌ Missing title, summary, or content");
+            return res.status(400).json({ error: "Title, summary, and content are required!" });
+        }
+
+        let coverPath = null;
+        let logoPath = null;
+
+        // Handle cover image
+        if (req.files?.file?.[0]) {
+            const { originalname, path } = req.files.file[0];
+            const ext = originalname.split('.').pop();
+            coverPath = path + '.' + ext;
+            fs.renameSync(path, coverPath);
+        }
+
+        // Handle logo image
+        if (req.files?.logo?.[0]) {
+            const { originalname, path } = req.files.logo[0];
+            const ext = originalname.split('.').pop();
+            logoPath = path + '.' + ext;
+            fs.renameSync(path, logoPath);
+        }
+
+        const { token } = req.cookies;
+
+        if (!token) {
+            console.error("❌ Missing token in cookies");
+            return res.status(401).json({ error: "Unauthorized: Token is required!" });
+        }
+
+        jwt.verify(token, secret, {}, async (err, info) => {
+            if (err) {
+                console.error("❌ Token verification failed:", err.message);
+                return res.status(401).json({ error: "Unauthorized access!" });
+            }
+
+            const post = await Post.findById(postId);
+
+            if (!post) {
+                console.error("❌ Post not found");
+                return res.status(404).json({ error: "Post not found!" });
+            }
+
+            if (post.author.toString() !== info.id) {
+                console.error("❌ Unauthorized: User is not the author of this post");
+                return res.status(403).json({ error: "You are not authorized to update this post!" });
+            }
+
+            // Update post
+            post.title = title;
+            post.summary = summary;
+            post.content = content;
+
+            if (coverPath) {
+                post.cover = coverPath;
+            }
+
+            if (logoPath) {
+                post.logo = logoPath;
+            }
+
+            const updatedPost = await post.save();
+
+            res.json({ message: "Post updated successfully!", post: updatedPost });
+        });
+    } catch (error) {
+        console.error("💥 Internal server error:", error.message);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
 // app.post('/post', uploadMiddleware.single('file'), async (req, res) => {
 //         try {
 //                 if (!req.file) {
@@ -165,95 +254,99 @@ app.post('/post', uploadMiddleware.fields([
 //         }
 // });
 
-app.put('/post/:id', uploadMiddleware.single('file'), async (req, res) => {
-        try {
-            const postId = req.params.id;
+// app.put('/post/:id', uploadMiddleware.fields([
+//     { name: 'file', maxCount: 1 },
+//     { name: 'logo', maxCount: 1 }
+// ]), async (req, res) => {
+
+//         try {
+//             const postId = req.params.id;
     
-            if (!postId) {
-                console.error("❌ Post ID is missing");
-                return res.status(400).json({ error: "Post ID is required!" });
-            }
+//             if (!postId) {
+//                 console.error("❌ Post ID is missing");
+//                 return res.status(400).json({ error: "Post ID is required!" });
+//             }
     
-            console.log(`📌 Post ID: ${postId}`);
+//             console.log(`📌 Post ID: ${postId}`);
     
-            const { title, summary, content , logo } = req.body;
+//             const { title, summary, content , logo } = req.body;
     
-            if (!title || !summary || !content ||!logo) {
-                console.error("❌ Missing title, summary, or content");
-                return res.status(400).json({ error: "Title, summary, and content are required for updating!" });
-            }
+//             if (!title || !summary || !content ||!logo) {
+//                 console.error("❌ Missing title, summary, or content");
+//                 return res.status(400).json({ error: "Title, summary, and content are required for updating!" });
+//             }
     
-            console.log(`📋 Received Data: title=${title}, summary=${summary}, content=${content}`);
+//             console.log(`📋 Received Data: title=${title}, summary=${summary}, content=${content}`);
     
-            let newPath = null;
+//             let newPath = null;
     
-            // Handle file upload if provided
-            if (req.file) {
-                console.log("📂 File upload detected");
-                const { originalname, path } = req.file;
-                const parts = originalname.split('.');
-                const ext = parts[parts.length - 1];
-                newPath = path + '.' + ext;
-                console.log(`🖼️ File being renamed: ${path} ➡️ ${newPath}`);
-                fs.renameSync(path, newPath);
-            } else {
-                console.log("📂 No file uploaded");
-            }
+//             // Handle file upload if provided
+//             if (req.file) {
+//                 console.log("📂 File upload detected");
+//                 const { originalname, path } = req.file;
+//                 const parts = originalname.split('.');
+//                 const ext = parts[parts.length - 1];
+//                 newPath = path + '.' + ext;
+//                 console.log(`🖼️ File being renamed: ${path} ➡️ ${newPath}`);
+//                 fs.renameSync(path, newPath);
+//             } else {
+//                 console.log("📂 No file uploaded");
+//             }
     
-            const { token } = req.cookies;
+//             const { token } = req.cookies;
     
-            if (!token) {
-                console.error("❌ Missing token in cookies");
-                return res.status(401).json({ error: "Unauthorized: Token is required!" });
-            }
+//             if (!token) {
+//                 console.error("❌ Missing token in cookies");
+//                 return res.status(401).json({ error: "Unauthorized: Token is required!" });
+//             }
     
-            console.log("🔑 Token found, verifying...");
+//             console.log("🔑 Token found, verifying...");
     
-            jwt.verify(token, secret, {}, async (err, info) => {
-                if (err) {
-                    console.error("❌ Token verification failed:", err.message);
-                    return res.status(401).json({ error: "Unauthorized access!" });
-                }
+//             jwt.verify(token, secret, {}, async (err, info) => {
+//                 if (err) {
+//                     console.error("❌ Token verification failed:", err.message);
+//                     return res.status(401).json({ error: "Unauthorized access!" });
+//                 }
     
-                console.log(`✅ Token verified: User ID=${info.id}`);
+//                 console.log(`✅ Token verified: User ID=${info.id}`);
     
-                const post = await Post.findById(postId);
+//                 const post = await Post.findById(postId);
     
-                if (!post) {
-                    console.error("❌ Post not found");
-                    return res.status(404).json({ error: "Post not found!" });
-                }
+//                 if (!post) {
+//                     console.error("❌ Post not found");
+//                     return res.status(404).json({ error: "Post not found!" });
+//                 }
     
-                console.log("📃 Post found, verifying author...");
+//                 console.log("📃 Post found, verifying author...");
                 
-                if (post.author.toString() !== info.id) {
-                    console.error("❌ Unauthorized: User is not the author of this post");
-                    return res.status(403).json({ error: "You are not authorized to update this post!" });
-                }
+//                 if (post.author.toString() !== info.id) {
+//                     console.error("❌ Unauthorized: User is not the author of this post");
+//                     return res.status(403).json({ error: "You are not authorized to update this post!" });
+//                 }
     
-                console.log("✅ User authorized, updating post...");
+//                 console.log("✅ User authorized, updating post...");
     
-                // Update post fields
-                post.title = title;
-                post.summary = summary;
-                post.content = content;
+//                 // Update post fields
+//                 post.title = title;
+//                 post.summary = summary;
+//                 post.content = content;
     
-                if (newPath) {
-                    post.cover = newPath;
-                    console.log("🖼️ Cover image updated");
-                }
+//                 if (newPath) {
+//                     post.cover = newPath;
+//                     console.log("🖼️ Cover image updated");
+//                 }
     
-                const updatedPost = await post.save();
+//                 const updatedPost = await post.save();
     
-                console.log("🎉 Post updated successfully:", updatedPost);
+//                 console.log("🎉 Post updated successfully:", updatedPost);
     
-                res.json({ message: "Post updated successfully!", post: updatedPost });
-            });
-        } catch (error) {
-            console.error("💥 Internal server error:", error.message);
-            res.status(500).json({ error: "Internal server error" });
-        }
-    });
+//                 res.json({ message: "Post updated successfully!", post: updatedPost });
+//             });
+//         } catch (error) {
+//             console.error("💥 Internal server error:", error.message);
+//             res.status(500).json({ error: "Internal server error" });
+//         }
+//     });
     
 // // =====================================================
 
