@@ -85,7 +85,8 @@ export default function PostPage() {
             <div className="info-columns">
                 <div className="info-column">
                     <h3 className="section-title">About {postInfo.title}</h3>
-                    <p>{postInfo.about || 'A vibrant dining experience offering a fusion of flavors in a cozy ambiance. Perfect for family dinners, romantic dates, and business meetings.'}</p>
+            <div className="content" dangerouslySetInnerHTML={{ __html: postInfo.content }} />
+
 
                     <h3 className="section-title">Ambiance</h3>
                     <p>{postInfo.ambiance || 'Modern and elegant decor with soft lighting and comfortable seating. Features include live music on weekends and outdoor seating options.'}</p>
@@ -102,6 +103,8 @@ export default function PostPage() {
 
                     <h3 className="section-title">Contact</h3>
                     <p>
+            <div className="summary" dangerouslySetInnerHTML={{ __html: postInfo.summary }} />
+
                         📞 {postInfo.contact || '+92 336 3696699'}<br />
                         🌐 {postInfo.website || 'www.example.com'}<br />
                         📧 {postInfo.email || 'info@example.com'}
@@ -223,3 +226,6 @@ export default function PostPage() {
         </div>
     )
 }
+
+
+
