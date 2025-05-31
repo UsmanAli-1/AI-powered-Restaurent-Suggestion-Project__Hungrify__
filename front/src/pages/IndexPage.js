@@ -5,13 +5,22 @@ import Post from '../post';
 export default function IndexPage() {
     const [posts, setPosts] = useState([]);
     useEffect(() => {
-        fetch('http://localhost:4000/post').then(response => {
-            response.json().then(posts => {
-                setPosts(posts);
-                console.log("post loaded 🥅🥅🥅", posts);
-            });
-        });
-    }, []);
+  fetch('http://localhost:4000/post')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Failed to fetch posts');
+      }
+      return response.json();
+    })
+    .then(posts => {
+      setPosts(posts);
+      console.log("✅ Posts loaded:", posts);
+    })
+    .catch(error => {
+      console.error("❌ Error loading posts:", error);
+    });
+}, []);
+
     return (
         <>
         <div className="slogan">

@@ -85,11 +85,11 @@ export default function PostPage() {
             <div className="info-columns">
                 <div className="info-column">
                     <h3 className="section-title">About {postInfo.title}</h3>
-            <div className="content" dangerouslySetInnerHTML={{ __html: postInfo.content }} />
+            <div className="content" dangerouslySetInnerHTML={{ __html: postInfo.about }} />
 
 
                     <h3 className="section-title">Ambiance</h3>
-                    <p>{postInfo.ambiance || 'Modern and elegant decor with soft lighting and comfortable seating. Features include live music on weekends and outdoor seating options.'}</p>
+                    <p>{postInfo.content || 'Modern and elegant decor with soft lighting and comfortable seating. Features include live music on weekends and outdoor seating options.'}</p>
                 </div>
 
                 <div className="info-column">
@@ -102,13 +102,19 @@ export default function PostPage() {
                     </ul>
 
                     <h3 className="section-title">Contact</h3>
-                    <p>
-            <div className="summary" dangerouslySetInnerHTML={{ __html: postInfo.summary }} />
+                <p>
+                📞 <a href={`tel:${postInfo.contact}`} >{postInfo.contact}</a>
+                        <br />
+                🌐{" "}<a
+                    href={postInfo.website.startsWith("http")? postInfo.website: `https://${postInfo.website}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >{postInfo.website}</a>
+                        <br />
+                📧{" "}<a href={`mailto:${postInfo.email}`}>{postInfo.email}</a>
 
-                        📞 {postInfo.contact || '+92 336 3696699'}<br />
-                        🌐 {postInfo.website || 'www.example.com'}<br />
-                        📧 {postInfo.email || 'info@example.com'}
-                    </p>
+                </p>
+
                 </div>
             </div>
 
@@ -229,3 +235,174 @@ export default function PostPage() {
 
 
 
+
+// import { useContext, useEffect, useState } from "react";
+// import { useParams, Link } from "react-router-dom";
+// import { UserContext } from "../UserContext";
+// import { FaWhatsapp } from "react-icons/fa";
+
+// export default function PostPage() {
+//     const [postInfo, setPostInfo] = useState();
+//     const { id } = useParams();
+//     const { userInfo } = useContext(UserContext);
+
+//     useEffect(() => {
+//         fetch(`http://localhost:4000/post/${id}`)
+//             .then(response => response.json())
+//             .then(data => setPostInfo(data))
+//             .catch(error => console.error("Error fetching post:", error));
+//     }, [id]);
+
+//     if (!postInfo) return '';
+
+//     // Ensure ambianceImages is always an array
+//     const ambianceImages = Array.isArray(postInfo.ambianceImages)
+//         ? postInfo.ambianceImages.map(img => `http://localhost:4000/${img}`)
+//         : postInfo.cover
+//             ? [`http://localhost:4000/${postInfo.cover}`]
+//             : [];
+
+//     return (
+//         <div className="post-page">
+
+//             <div className="top">
+//                 <div className="logo-rating">
+//                     <div className="restaurant-logo">
+//                         <img src={`http://localhost:4000/${postInfo.logo}`} alt="Restaurant Logo" />
+//                     </div>
+//                     <div className="rating-badge">
+//                         <span style={{ marginRight: '5px' }}>⭐</span>
+//                         {postInfo.rating}/5
+//                     </div>
+//                 </div>
+
+//                 <div className="post-header">
+//                     <h1 className="post-title">{postInfo.title}</h1>
+//                 </div>
+//             </div>
+
+//             <div className="post-meta">
+//                 <div>
+//                     <span>📍 {postInfo.location}</span>
+//                 </div>
+//                 <div>
+//                     <span>🕒 {postInfo.timings}</span>
+//                 </div>
+//             </div>
+
+//             {userInfo.id === postInfo.author._id && (
+//                 <div className="edit-row">
+//                     <Link className="edit-btn" to={`/edit/${postInfo._id}`}>
+//                         <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+//                             viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+//                             <path strokeLinecap="round" strokeLinejoin="round"
+//                                 d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 
+//                                    16.07a4.5 4.5 0 0 1-1.897 1.13L6 
+//                                    18l.8-2.685a4.5 4.5 0 0 1 
+//                                    1.13-1.897l8.932-8.931Zm0 
+//                                    0L19.5 7.125M18 
+//                                    14v4.75A2.25 2.25 0 0 1 15.75 
+//                                    21H5.25A2.25 2.25 0 0 1 3 
+//                                    18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+//                         </svg>
+//                         Edit this post
+//                     </Link>
+//                 </div>
+//             )}
+
+//             <div className="info-columns">
+//                 <div className="info-column">
+//                     <h3 className="section-title">About {postInfo.title}</h3>
+//                     <div className="content" dangerouslySetInnerHTML={{ __html: postInfo.content }} />
+
+//                     <h3 className="section-title">Ambiance</h3>
+//                     <p>{postInfo.ambiance}</p>
+//                 </div>
+
+//                 <div className="info-column">
+//                     <h3 className="section-title">Deals & Offers</h3>
+//                     <ul>
+//                         <li>🎉 Happy Hours: 4PM-7PM (30% off on drinks)</li>
+//                         <li>👨‍👩‍👧‍👦 Family Combo: 20% off on orders above Rs.2000</li>
+//                         <li>🎂 Birthday Special: Free dessert</li>
+//                         <li>💳 Credit Card Discount: 10% off with XYZ Bank</li>
+//                     </ul>
+
+//                     <h3 className="section-title">Contact</h3>
+//                     <div className="summary" dangerouslySetInnerHTML={{ __html: postInfo.summary }} />
+//                     <p>
+//                         📞 {postInfo.contact}<br />
+//                         🌐 {postInfo.website}<br />
+//                         📧 {postInfo.email}
+//                     </p>
+//                 </div>
+//             </div>
+
+//             <div className="ambiance-slider">
+//                 <h3 className="section-title">Restaurant Ambiance</h3>
+//                 <div className="slider-container">
+//                     {ambianceImages.map((img, index) => (
+//                         <div key={index} className="slide">
+//                             <img src={img} alt={`Ambiance ${index + 1}`} />
+//                         </div>
+//                     ))}
+//                 </div>
+//             </div>
+
+//             <div className="menu-highlights">
+//                 <h3 className="section-title">Menu Highlights</h3>
+//                 <div className="menu-grid">
+//                     <div className="menu-item">
+//                         <div className="menu-item-title">Signature Dish</div>
+//                         <div>{postInfo.signatureDish}</div>
+//                         <div className="menu-item-price">Rs. 599</div>
+//                     </div>
+//                     <div className="menu-item">
+//                         <div className="menu-item-title">Chef's Special</div>
+//                         <div>{postInfo.chefSpecial}</div>
+//                         <div className="menu-item-price">Rs. 599</div>
+//                     </div>
+//                     <div className="menu-item">
+//                         <div className="menu-item-title">Vegetarian Option</div>
+//                         <div>{postInfo.vegOption}</div>
+//                         <div className="menu-item-price">Rs. 599</div>
+//                     </div>
+//                     <div className="menu-item">
+//                         <div className="menu-item-title">Dessert</div>
+//                         <div>{postInfo.dessert}</div>
+//                         <div className="menu-item-price">Rs. 599</div>
+//                     </div>
+//                 </div>
+//             </div>
+
+//             <div className="reviews-section">
+//                 <h3 className="section-title">Customer Reviews</h3>
+
+//                 <div className="reviews-container">
+//                     <div className="review-card">
+//                         <div className="reviewer">
+//                             <div className="reviewer-avatar">UA</div>
+//                             <div>
+//                                 <div className="reviewer-name">Usman Ali</div>
+//                                 <div className="review-rating">⭐⭐⭐⭐⭐ (5/5)</div>
+//                             </div>
+//                         </div>
+//                         <p className="review-text">"The food was absolutely delicious! Highly recommend the chef's special!"</p>
+//                         <div className="review-date">2 weeks ago</div>
+//                     </div>
+//                     {/* Additional hardcoded reviews can be replaced later with real review data */}
+//                 </div>
+//             </div>
+
+//             <div className="reservation-cta">
+//                 <h3>Make a Reservation</h3>
+//                 <p>Call us at {postInfo.contact} or book online through our website</p>
+//                 <button className="reservation-button">Book Now</button>
+//             </div>
+
+//             <a href={`https://wa.me/${postInfo.whatsapp}`} target="_blank" rel="noopener noreferrer" className="whatsapp-button">
+//                 <FaWhatsapp style={{ fontSize: '40px', color: '#25D366', height: "70%" }} />
+//             </a>
+//         </div>
+//     );
+// }

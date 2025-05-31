@@ -5,11 +5,14 @@ import Editor from '../Editor';
 export default function EditPost() {
     const { id } = useParams();
     const [title, setTitle] = useState('');
-    const [summary, setSummary] = useState('');
+    const [about, setabout] = useState('');
     const [content, setContent] = useState('');
     const [files, setFiles] = useState('');
     const [logo, setLogo] = useState(''); // for logo code
     const [redirect, setRedirect] = useState(false);
+    const [contact, setContact] = useState("");
+    const [website, setWebsite] = useState("");
+    const [email, setEmail] = useState("");
 
     // Fetch post details on component mount
     useEffect(() => {
@@ -25,7 +28,11 @@ export default function EditPost() {
                 console.log("✅ Post data fetched successfully:", postInfo);
                 setTitle(postInfo.title);
                 setContent(postInfo.content);
-                setSummary(postInfo.summary);
+                setabout(postInfo.about);
+                setContact(postInfo.contact);
+                setWebsite(postInfo.website);
+                setEmail(postInfo.email);
+
             })
             .catch(err => {
                 console.error("❌ Error fetching post data:", err.message);
@@ -39,8 +46,11 @@ export default function EditPost() {
 
         const data = new FormData();
         data.set('title', title);
-        data.set('summary', summary);
+        data.set('about', about);
         data.set('content', content);
+        data.set('contact', contact);
+        data.set('website', website);
+        data.set('email', email);
         data.set('id', id);
 
         if (logo?.[0]) {
@@ -90,14 +100,31 @@ export default function EditPost() {
                 onChange={ev => setTitle(ev.target.value)}
             />
             <input
-                type="summary"
-                placeholder="Summary"
-                value={summary}
-                onChange={ev => setSummary(ev.target.value)}
+                type="about"
+                placeholder="about"
+                value={about}
+                onChange={ev => setabout(ev.target.value)}
             />
+            <input type="contact"
+                placeholder="contact"
+                value={contact}
+                onChange={ev => setContact(ev.target.value)}
+            />
+            <input type="website"
+                placeholder="website"
+                value={website}
+                onChange={ev => setWebsite(ev.target.value)}
+            />
+            <input type="email"
+                placeholder="email"
+                value={email}
+                onChange={ev => setEmail(ev.target.value)}
+            />
+            <p>Update Logo</p>
                 <input type="file"
                     onChange={ev => setLogo(ev.target.files)}
                 />
+            <p>Update Cover Photo</p>                
             <input
                 type="file"
                 onChange={ev => setFiles(ev.target.files)}
