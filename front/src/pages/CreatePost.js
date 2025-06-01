@@ -13,6 +13,8 @@ export default function CreatePost() {
     const [contact, setContact] = useState("");
     const [website, setWebsite] = useState("");
     const [email, setEmail] = useState("");
+    const [location, setLocation] = useState("");
+
 
     async function createNewPost(ev) {
         try {
@@ -27,7 +29,8 @@ export default function CreatePost() {
             data.set('content', content);
             data.set('contact', contact);
             data.set('website', website);
-            data.set('email', email)
+            data.set('email', email);
+            data.set('location',location)
             if (files.length > 0) {
                 data.set('file', files[0]);
                 console.log("📂 File attached:", files[0].name);
@@ -81,6 +84,11 @@ export default function CreatePost() {
                 placeholder="about"
                 value={about}
                 onChange={ev => setabout(ev.target.value)}
+            />
+            <input type="location"
+                placeholder="location"
+                value={location}
+                onChange={ev => setLocation(ev.target.value)}
             />
             <input type="contact"
                 placeholder="contact"

@@ -13,6 +13,8 @@ export default function EditPost() {
     const [contact, setContact] = useState("");
     const [website, setWebsite] = useState("");
     const [email, setEmail] = useState("");
+    const [location, setLocation] = useState("");
+
 
     // Fetch post details on component mount
     useEffect(() => {
@@ -32,6 +34,7 @@ export default function EditPost() {
                 setContact(postInfo.contact);
                 setWebsite(postInfo.website);
                 setEmail(postInfo.email);
+                setLocation(postInfo.location);
 
             })
             .catch(err => {
@@ -51,6 +54,7 @@ export default function EditPost() {
         data.set('contact', contact);
         data.set('website', website);
         data.set('email', email);
+        data.set('location' , location);
         data.set('id', id);
 
         if (logo?.[0]) {
@@ -104,6 +108,11 @@ export default function EditPost() {
                 placeholder="about"
                 value={about}
                 onChange={ev => setabout(ev.target.value)}
+            />
+            <input type="location"
+                placeholder="location"
+                value={location}
+                onChange={ev => setLocation(ev.target.value)}
             />
             <input type="contact"
                 placeholder="contact"

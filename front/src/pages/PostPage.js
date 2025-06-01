@@ -57,15 +57,23 @@ export default function PostPage() {
             {/* Location and timings */}
             <div className="post-meta">
                 <div>
-                    <span>📍 {postInfo.location || '123 Iqra uni, Gulshan'}</span>
+                    <a
+                        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(postInfo.location)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ textDecoration: 'none', color:'green' , fontWeight:'bolder' }} 
+                    >
+                        📍 Location
+                    </a>
                 </div>
+
                 <div>
                     <span>🕒 {postInfo.timings || '10:00 AM - 11:00 PM'}</span>
                 </div>
             </div>
 
             {/* Edit button for owner */}
-            {userInfo.id === postInfo.author._id && (
+            {userInfo?.id === postInfo?.author?._id && (
                 <div className="edit-row">
                     <Link className="edit-btn" to={`/edit/${postInfo._id}`}>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">

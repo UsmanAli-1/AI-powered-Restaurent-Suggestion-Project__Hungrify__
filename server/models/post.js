@@ -6,6 +6,7 @@ const PostSchema = new Schema({
     title: String,
     about: String,
     content: String,
+    location: String,
     contact: String,
     website: String,
     email: String,
