@@ -43,10 +43,10 @@ export default function PostPage() {
                     <img src={`http://localhost:4000/${postInfo.logo}`} alt="Restaurant Logo" />
                 </div>
                 
-                <div className="rating-badge">
+                {/* <div className="rating-badge">
                     <span style={{ marginRight: '5px' }}>⭐</span>
                     {postInfo.rating || '4.5'}/5
-                </div>
+                </div> */}
             </div>
 
             {/* Header with title */}
@@ -68,7 +68,8 @@ export default function PostPage() {
                 </div>
 
                 <div>
-                    <span>🕒 {postInfo.timings || '10:00 AM - 11:00 PM'}</span>
+                    <span>🕒 Opening Time : {postInfo.starttime } , </span>
+                    <span> Closing Time : {postInfo.endtime }</span>
                 </div>
             </div>
 
@@ -93,21 +94,21 @@ export default function PostPage() {
             <div className="info-columns">
                 <div className="info-column">
                     <h3 className="section-title">About {postInfo.title}</h3>
-            <div className="content" dangerouslySetInnerHTML={{ __html: postInfo.about }} />
-
-
+                    {/* <div className="content" dangerouslySetInnerHTML={{ __html: postInfo.about }} />
+                     */}
+                    {postInfo.about}
                     <h3 className="section-title">Ambiance</h3>
-                    <p>{postInfo.content || 'Modern and elegant decor with soft lighting and comfortable seating. Features include live music on weekends and outdoor seating options.'}</p>
+                    {postInfo.content || 'Modern and elegant decor with soft lighting and comfortable seating. Features include live music on weekends and outdoor seating options.'}
                 </div>
 
                 <div className="info-column">
-                    <h3 className="section-title">Deals & Offers</h3>
+                    {/* <h3 className="section-title">Deals & Offers</h3>
                     <ul>
                         <li>🎉 Happy Hours: 4PM-7PM (30% off on drinks)</li>
                         <li>👨‍👩‍👧‍👦 Family Combo: 20% off on orders above Rs.2000</li>
                         <li>🎂 Birthday Special: Free dessert</li>
                         <li>💳 Credit Card Discount: 10% off with XYZ Bank</li>
-                    </ul>
+                    </ul> */}
 
                     <h3 className="section-title">Contact</h3>
                 <p>
@@ -230,12 +231,13 @@ export default function PostPage() {
             </div>
 
             {/* WhatsApp Button */}
-            <a href={`https://wa.me/${postInfo.whatsapp || '+92 336 3696699'}`} target="_blank" rel="noopener noreferrer" className="whatsapp-button">
+            <a
+                href={`https://wa.me/${postInfo.whatsapp ? postInfo.whatsapp.replace(/\D/g, '') : ''}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="whatsapp-button"
+            >
             <FaWhatsapp style={{ fontSize: '40px', color: '#25D366',height:"70%"}} />
-
-
-
-
             </a>
         </div>
     )

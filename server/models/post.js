@@ -6,6 +6,8 @@ const PostSchema = new Schema({
     title: String,
     about: String,
     content: String,
+    starttime: String,
+    endtime: String,
     location: String,
     contact: String,
     website: String,

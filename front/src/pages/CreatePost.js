@@ -14,6 +14,9 @@ export default function CreatePost() {
     const [website, setWebsite] = useState("");
     const [email, setEmail] = useState("");
     const [location, setLocation] = useState("");
+    const [starttime, setStarttime] = useState("");
+    const [endtime, setEndtime] = useState("");
+
 
 
     async function createNewPost(ev) {
@@ -31,6 +34,9 @@ export default function CreatePost() {
             data.set('website', website);
             data.set('email', email);
             data.set('location',location)
+            data.set('starttime', starttime);
+            data.set('endtime', endtime);
+
             if (files.length > 0) {
                 data.set('file', files[0]);
                 console.log("📂 File attached:", files[0].name);
@@ -84,6 +90,16 @@ export default function CreatePost() {
                 placeholder="about"
                 value={about}
                 onChange={ev => setabout(ev.target.value)}
+            />
+            <input type="starttime"
+                placeholder="Opening time AM/PM"
+                value={starttime}
+                onChange={ev => setStarttime(ev.target.value)}
+            />
+            <input type="endtime"
+                placeholder="Closing time AM/PM "
+                value={endtime}
+                onChange={ev => setEndtime(ev.target.value)}
             />
             <input type="location"
                 placeholder="location"

@@ -101,7 +101,7 @@ app.post('/post', uploadMiddleware.fields([
     { name: 'logo', maxCount: 1 }
 ]), async (req, res) => {
     try {
-        const { title, about, content ,contact , website , email ,location} = req.body;
+        const { title, about, content ,contact , website , email ,location ,starttime, endtime} = req.body;
 
         const coverFile = req.files?.file?.[0];
         const logoFile = req.files?.logo?.[0];
@@ -127,6 +127,8 @@ app.post('/post', uploadMiddleware.fields([
                 title,
                 about,
                 content,
+                starttime,
+                endtime,
                 location,
                 contact,
                 website,
@@ -159,11 +161,11 @@ app.put('/post/:id', uploadMiddleware.fields([
 
         console.log(`📌 Post ID: ${postId}`);
 
-        const { title, about, content, contact , website , email , location} = req.body;
+        const { title, about, content, contact , website , email , location ,starttime ,endtime} = req.body;
 
-        if (!title || !about || !content || !contact || !website || !email || !location) {
+        if (!title || !about || !content || !contact || !website || !email || !location || !starttime || !endtime) {
             console.error("❌ Missing title, about, or content");
-            return res.status(400).json({ error: "Title, about, content ,contact , website ,location , email  are required!" });
+            return res.status(400).json({ error: "Title, about, content ,contact , website ,location , email ,starttime ,endtime are required!" });
         }
 
         let coverPath = null;
@@ -214,6 +216,8 @@ app.put('/post/:id', uploadMiddleware.fields([
             post.title = title;
             post.about = about;
             post.content = content;
+            post.starttime = starttime,
+            post.endtime = endtime,
             post.location = location;
             post.contact = contact;
             post.website = website;

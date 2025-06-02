@@ -14,6 +14,8 @@ export default function EditPost() {
     const [website, setWebsite] = useState("");
     const [email, setEmail] = useState("");
     const [location, setLocation] = useState("");
+    const [starttime, setStarttime] = useState("");
+    const [endtime, setEndtime] = useState("");
 
 
     // Fetch post details on component mount
@@ -35,7 +37,8 @@ export default function EditPost() {
                 setWebsite(postInfo.website);
                 setEmail(postInfo.email);
                 setLocation(postInfo.location);
-
+                setStarttime(postInfo.starttime);
+                setEndtime(postInfo.endtime);
             })
             .catch(err => {
                 console.error("❌ Error fetching post data:", err.message);
@@ -55,6 +58,9 @@ export default function EditPost() {
         data.set('website', website);
         data.set('email', email);
         data.set('location' , location);
+        data.set('starttime', starttime);
+        data.set('endtime', endtime);
+        
         data.set('id', id);
 
         if (logo?.[0]) {
@@ -113,6 +119,16 @@ export default function EditPost() {
                 placeholder="location"
                 value={location}
                 onChange={ev => setLocation(ev.target.value)}
+            />
+            <input type="starttime"
+                placeholder="Opening time AM/PM"
+                value={starttime}
+                onChange={ev => setStarttime(ev.target.value)}
+            />
+            <input type="endtime"
+                placeholder="Closing time AM/PM"
+                value={endtime}
+                onChange={ev => setEndtime(ev.target.value)}
             />
             <input type="contact"
                 placeholder="contact"
