@@ -98,13 +98,15 @@ app.post('/logout', (req, res) => {
 
 app.post('/post', uploadMiddleware.fields([
     { name: 'file', maxCount: 1 },
-    { name: 'logo', maxCount: 1 }
+    { name: 'logo', maxCount: 1 },
+    { name: 'images', maxCount: 10 }    // ← accept up to 10 “ambiance” images
 ]), async (req, res) => {
     try {
         const { title, about, content ,contact , website , email ,location ,starttime, endtime} = req.body;
 
         const coverFile = req.files?.file?.[0];
         const logoFile = req.files?.logo?.[0];
+        const otherFiles = req.files?.images || [];
 
         if (!coverFile || !logoFile) {
             return res.status(400).json({ error: "Cover image and logo are required!" });
@@ -118,6 +120,17 @@ app.post('/post', uploadMiddleware.fields([
 
         fs.renameSync(coverFile.path, newCoverPath);
         fs.renameSync(logoFile.path, newLogoPath);
+
+        // now process each of the “otherFiles” (images) and rename them too
+        const imagePaths = [];
+        for (let fileObj of otherFiles) {
+            const ext = fileObj.originalname.split('.').pop();
+            const renamed = fileObj.path + '.' + ext;
+            fs.renameSync(fileObj.path, renamed);
+            imagePaths.push(renamed);
+        }
+
+
 
         const { token } = req.cookies;
         jwt.verify(token, secret, {}, async (err, info) => {
@@ -135,6 +148,7 @@ app.post('/post', uploadMiddleware.fields([
                 email,
                 cover: newCoverPath,
                 logo: newLogoPath,
+                images: imagePaths,
                 author: info.id,
             });
 
@@ -149,7 +163,8 @@ app.post('/post', uploadMiddleware.fields([
 
 app.put('/post/:id', uploadMiddleware.fields([
     { name: 'file', maxCount: 1 },
-    { name: 'logo', maxCount: 1 }
+    { name: 'logo', maxCount: 1 },
+    { name: 'images', maxCount: 10 }    // ← allow replacing/adding up to 10 new ambiance images
 ]), async (req, res) => {
     try {
         const postId = req.params.id;
@@ -186,6 +201,18 @@ app.put('/post/:id', uploadMiddleware.fields([
             logoPath = path + '.' + ext;
             fs.renameSync(path, logoPath);
         }
+
+        // Handle “images” array
+        const otherFiles = req.files?.images || [];
+        const imagePaths = [];
+        for (let fileObj of otherFiles) {
+            const ext = fileObj.originalname.split('.').pop();
+            const renamed = fileObj.path + '.' + ext;
+            fs.renameSync(fileObj.path, renamed);
+            imagePaths.push(renamed);
+        }
+
+
 
         const { token } = req.cookies;
 
@@ -229,6 +256,11 @@ app.put('/post/:id', uploadMiddleware.fields([
 
             if (logoPath) {
                 post.logo = logoPath;
+            }
+
+            if (imagePaths.length > 0) {
+               // replace the entire array with the newly uploaded ones
+                post.images = imagePaths;
             }
 
             const updatedPost = await post.save();

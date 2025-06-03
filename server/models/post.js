@@ -14,6 +14,8 @@ const PostSchema = new Schema({
     email: String,
     cover: String,
     logo: String,
+    // ←– add this new field to hold multiple image paths
+    images: [{ type: String }],
     author: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
 }, { timestamps: true });
 
