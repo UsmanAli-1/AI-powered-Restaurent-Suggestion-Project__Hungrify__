@@ -153,7 +153,7 @@ export default function Header() {
 
   return (
     <header>
-      <Link to="/" className="logo"><img src={logo} /></Link>
+      <Link to="/" className="logo" style={{ width: '4rem' }}><img src={logo} /></Link>
       <nav>
         {username && (
           <>
@@ -164,8 +164,8 @@ export default function Header() {
         )}
         {!username && (
           <>
-            <Link to="login"><Button variant="contained" sx={{ backgroundColor: '#4caf50' }}>Login</Button></Link>
-            <Link to="Register"><Button variant="contained" sx={{ mr: 2, backgroundColor: '#4caf50' }}>Register</Button></Link>
+            <Link to="login"><Button variant="contained" sx={{ backgroundColor: '#0f0c63ff' }}>Login</Button></Link>
+            <Link to="Register"><Button variant="contained" sx={{ mr: 2, backgroundColor: '#0f0c63ff' }}>Register</Button></Link>
           </>
         )}
       </nav>

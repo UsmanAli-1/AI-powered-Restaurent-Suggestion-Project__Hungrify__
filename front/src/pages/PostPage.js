@@ -338,7 +338,7 @@
 import { useContext, useEffect, useState, useRef } from "react";
 import { useParams, Link } from "react-router-dom";
 import { UserContext } from "../UserContext";
-import menu from "./menu.jpeg";
+import menu from "../menu.jpg";
 
 export default function PostPage() {
   const [postInfo, setPostInfo] = useState(null);
@@ -644,7 +644,7 @@ export default function PostPage() {
             <div className="reviewer">
               <div
                 className="reviewer-avatar"
-                style={{ backgroundColor: "#4CAF50" }}
+                style={{ backgroundColor: "#04195eff" }}
               >
                 AM
               </div>
